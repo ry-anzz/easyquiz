@@ -88,7 +88,7 @@ export default function TestViewerPage({ params }: { params: { testId: string } 
 
       {/* Lista de Questões da Prova */}
       <div>
-        {mockProva.questoes.map((questao) => (
+        {/* {mockProva.questoes.map((questao) => (
           <TestQuestion
             key={questao.numero}
             numero={questao.numero}
@@ -97,7 +97,7 @@ export default function TestViewerPage({ params }: { params: { testId: string } 
             opcoes={questao.opcoes}
             mostrarResposta={mostrarRespostas} // Passa o estado para o componente filho
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );
