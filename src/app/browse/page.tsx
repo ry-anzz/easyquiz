@@ -90,7 +90,7 @@ export default function BrowseQuestionsPage() {
         {/* Coluna de Resultados (Direita) */}
         <main className="w-full md:w-3/4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {mockQuestoesPublicas.map((questao) => (
+            {/* {mockQuestoesPublicas.map((questao) => (
               <QuestionCard
                 key={questao.id}
                 id={questao.id}
@@ -100,7 +100,7 @@ export default function BrowseQuestionsPage() {
                 tipo={questao.tipo}
                 avaliacaoMedia={questao.avaliacaoMedia}
               />
-            ))}
+            ))} */}
           </div>
         </main>
       </div>
