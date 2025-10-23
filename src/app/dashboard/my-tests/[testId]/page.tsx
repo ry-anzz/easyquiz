@@ -4,8 +4,27 @@ import { useState } from 'react';
 import TestQuestion from '@/components/TestQuestion';
 import { Eye, EyeOff, FileDown, Edit } from 'lucide-react'; // Ícones
 
-// Dados Falsos (Mock Data) para a prova e suas questões
-const mockProva = {
+// 1. ADICIONE ESTAS DEFINIÇÕES DE TIPO
+type OpcaoMock = {
+  texto: string;
+  isCorreta: boolean;
+};
+
+type QuestaoMock = {
+  numero: number;
+  enunciado: string;
+  tipo: 'Multipla Escolha' | 'Dissertativa' | 'Verdadeiro/Falso';
+  opcoes: OpcaoMock[];
+};
+
+type ProvaMock = {
+  id: string;
+  titulo: string;
+  questoes: QuestaoMock[];
+};
+
+// 2. APLIQUE O TIPO AO SEU OBJETO MOCK
+const mockProva: ProvaMock = {
   id: 'p1',
   titulo: 'Prova 1 - Cálculo',
   questoes: [
@@ -37,6 +56,7 @@ const mockProva = {
     },
   ],
 };
+
 
 export default function TestViewerPage({ params }: { params: { testId: string } }) {
   // Estado para controlar a visibilidade das respostas
@@ -88,7 +108,7 @@ export default function TestViewerPage({ params }: { params: { testId: string } 
 
       {/* Lista de Questões da Prova */}
       <div>
-        {/* {mockProva.questoes.map((questao) => (
+        {mockProva.questoes.map((questao) => (
           <TestQuestion
             key={questao.numero}
             numero={questao.numero}
@@ -97,7 +117,7 @@ export default function TestViewerPage({ params }: { params: { testId: string } 
             opcoes={questao.opcoes}
             mostrarResposta={mostrarRespostas} // Passa o estado para o componente filho
           />
-        ))} */}
+        ))}
       </div>
     </div>
   );

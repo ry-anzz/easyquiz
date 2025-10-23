@@ -1,27 +1,34 @@
-import Link from 'next/link';
-import QuestionListItem from '@/components/QuestionListItem';
+import Link from "next/link";
+import QuestionListItem from "@/components/QuestionListItem";
 
-// Dados Falsos (Mock Data) para simular o que viria do banco
-const minhasQuestoes = [
+type MockQuestao = {
+  id: string;
+  enunciado: string;
+  tipo: "Multipla Escolha" | "Dissertativa" | "Verdadeiro/Falso";
+  dificuldade: "Fácil" | "Médio" | "Difícil";
+  isPublica: boolean;
+};
+
+const minhasQuestoes: MockQuestao[] = [
   {
-    id: '101',
-    enunciado: 'Qual é a capital do Brasil?',
-    tipo: 'Multipla Escolha',
-    dificuldade: 'Fácil',
+    id: "101",
+    enunciado: "Qual é a capital do Brasil?",
+    tipo: "Multipla Escolha",
+    dificuldade: "Fácil",
     isPublica: true,
   },
   {
-    id: '102',
-    enunciado: 'Descreva o processo de normalização de um banco de dados.',
-    tipo: 'Dissertativa',
-    dificuldade: 'Médio',
+    id: "102",
+    enunciado: "Descreva o processo de normalização de um banco de dados.",
+    tipo: "Dissertativa",
+    dificuldade: "Médio",
     isPublica: false,
   },
   {
-    id: '103',
-    enunciado: 'O Sol gira em torno da Terra.',
-    tipo: 'Verdadeiro/Falso',
-    dificuldade: 'Fácil',
+    id: "103",
+    enunciado: "O Sol gira em torno da Terra.",
+    tipo: "Verdadeiro/Falso",
+    dificuldade: "Fácil",
     isPublica: true,
   },
 ];
@@ -61,8 +68,8 @@ export default function MyQuestionsPage() {
         {minhasQuestoes.length === 0 && (
           <div className="bg-white p-6 shadow rounded-lg text-center text-gray-500">
             <p>Você ainda não criou nenhuma questão.</p>
-            <Link 
-              href="/dashboard/questions/new" 
+            <Link
+              href="/dashboard/questions/new"
               className="text-blue-600 hover:underline mt-2 inline-block"
             >
               Comece a criar agora!
