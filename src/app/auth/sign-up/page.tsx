@@ -82,7 +82,7 @@ export default function SignUpPage() {
           />
         </div>
 
-        {/* 🚨 NOVO: Campo Senha 🚨 */}
+        {/*NOVO: Campo Senha*/}
         <div className="mb-4">
           <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
             Senha
@@ -99,7 +99,7 @@ export default function SignUpPage() {
           />
         </div>
 
-        {/* 🚨 NOVO: Campo Confirmação de Senha 🚨 */}
+        {/*Campo Confirmação de Senha*/}
         <div className="mb-4">
           <label htmlFor="confirmPassword" className="block text-gray-700 text-sm font-bold mb-2">
             Confirmar Senha
