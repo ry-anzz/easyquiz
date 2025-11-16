@@ -1,54 +1,60 @@
+// src/components/Navbar.tsx
+
+'use client'; // 🚨 ESSENCIAL: Marcar como Client Component para usar hooks
+
 import Link from 'next/link';
-// Adicionamos o ícone de 'Search' (Lupa)
-import { BookMarked, Search } from 'lucide-react'; 
+import { usePathname } from 'next/navigation'; // Importação correta
 
 export default function Navbar() {
+  const pathname = usePathname();
+  
+  // As rotas estão corretas, baseadas na sua estrutura de pastas
+  const isAuthPage = pathname === '/auth/sign-up' || pathname === '/auth/sign-in';
+
+  // ... (Resto do componente conforme as correções anteriores)
+
+  const Logo = (
+    <div className="text-xl font-bold text-blue-600">
+      <Link href="/">EasyQuiz</Link> {/* Ajustei para / como padrão, não /dashboard */}
+    </div>
+  );
+
+  const SearchBar = (
+    <div className="flex-1 max-w-lg mx-8">
+      <input
+        type="search"
+        placeholder="Buscar por questões, provas, disciplinas..."
+        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+  );
+
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white border-b border-gray-200 z-10">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        
-        {/* Lado Esquerdo: Logo */}
-        <div className="flex-shrink-0">
-          <Link 
-            href="/" 
-            className="flex items-center text-2xl font-bold text-blue-600 hover:opacity-80 transition-opacity"
-          >
-            <BookMarked className="mr-2" />
-            EasyQuiz
-          </Link>
-        </div>
-
-        {/* Centro: Barra de Busca (Falsa) */}
-        {/* Este é o novo elemento "intuitivo" */}
-        <div className="flex-1 flex justify-center px-8">
-          <Link 
-            href="/browse"
-            className="flex items-center w-full max-w-md p-2 bg-gray-100 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-200 hover:border-gray-300 transition-colors"
-          >
-            <Search size={18} className="mr-2 text-gray-400" />
-            Buscar por questões, provas, disciplinas...
-          </Link>
-        </div>
-        
-        {/* Lado Direito: Botões de Autenticação */}
-        <div className="flex-shrink-0 flex items-center space-x-2">
-          {/* Botão Secundário (Login) */}
-          <Link 
-            href="/auth/sign-in" 
-            className="text-gray-700 font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            Login
-          </Link>
-
-          {/* Botão Primário (Cadastrar) */}
-          <Link 
-            href="/auth/sign-up" 
-            className="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-          >
-            Cadastrar
-          </Link>
-        </div>
+    <header className="bg-white shadow-md p-4 flex justify-between items-center">
+      
+      {/* 1. Área do Logo e Busca: Só aparece se o usuário NÃO estiver na página de Auth */}
+      <div className="flex items-center flex-1">
+        {!isAuthPage && (
+            <>
+                {Logo}
+                {SearchBar}
+            </>
+        )}
       </div>
-    </nav>
+
+      {/* 2. Área dos Botões de Login/Cadastro (sempre visíveis) */}
+      <nav className="flex items-center space-x-4">
+        {/* Usamos 'Link' em vez de 'a' */}
+        <Link href="/auth/sign-in" className="text-gray-700 hover:text-blue-500">
+          Login
+        </Link>
+        <Link
+          href="/auth/sign-up"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          Cadastrar
+        </Link>
+      </nav>
+    </header>
   );
 }
