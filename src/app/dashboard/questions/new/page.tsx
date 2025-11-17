@@ -3,16 +3,16 @@
 
 import { useState } from 'react';
 
-// Tipos para nossos estados (boa prática em TypeScript)
+// Tipos para nossos estados
 type TipoPergunta = 'Multipla Escolha' | 'Dissertativa' | 'Verdadeiro/Falso';
-type NivelDificuldade = 'Fácil' | 'Médio' | 'Difícil';
 
 export default function NewQuestionPage() {
-  // Estado para controlar o tipo de pergunta selecionado
+  // Estado para controlar o tipo de pergunta
   const [tipoPergunta, setTipoPergunta] = useState<TipoPergunta>('Multipla Escolha');
+  // Estado para o peso (opcional, mas útil para controle)
+  const [peso, setPeso] = useState(1.0);
 
   // --- Componentes Internos para Opções Dinâmicas ---
-  // (Vamos criar os componentes para cada tipo de resposta aqui)
 
   // Componente para Múltipla Escolha
   const OpcoesMultiplaEscolha = () => {
@@ -21,7 +21,6 @@ export default function NewQuestionPage() {
         <label className="block text-sm font-medium text-gray-700">
           Opções de Resposta
         </label>
-        {/* Placeholder para as opções dinâmicas */}
         <div className="flex items-center space-x-2">
           <input type="radio" name="opcao_correta" />
           <input type="text" className="w-full p-2 border rounded-md" placeholder="Opção 1" />
@@ -79,9 +78,11 @@ export default function NewQuestionPage() {
           />
         </div>
 
-        {/* 2. Linha de Filtros (Disciplina e Dificuldade) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Disciplina (Placeholder - idealmente viria do DB) */}
+        {/* 2. Configurações (Disciplina, Dificuldade e PESO) */}
+        {/* ALTERAÇÃO: Mudamos de md:grid-cols-2 para md:grid-cols-3 para caber o peso */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          {/* Disciplina */}
           <div>
             <label htmlFor="disciplina" className="block text-sm font-medium text-gray-700">
               Disciplina
@@ -108,6 +109,24 @@ export default function NewQuestionPage() {
               <option value="Difícil">Difícil</option>
             </select>
           </div>
+
+          {/* NOVO CAMPO: Peso da Questão */}
+          <div>
+            <label htmlFor="peso" className="block text-sm font-medium text-gray-700">
+              Peso (Pontos)
+            </label>
+            <input 
+              type="number" 
+              id="peso" 
+              step="0.1" // Permite decimais como 0.5
+              min="0"
+              className="w-full mt-1 p-2 border rounded-md"
+              placeholder="Ex: 1.0"
+              value={peso}
+              onChange={(e) => setPeso(parseFloat(e.target.value))}
+            />
+          </div>
+
         </div>
 
         {/* 3. Tipo de Pergunta */}
@@ -115,36 +134,39 @@ export default function NewQuestionPage() {
           <label className="block text-sm font-medium text-gray-700">
             Tipo de Pergunta
           </label>
-          <div className="flex space-x-4 mt-2">
-            <label className="flex items-center">
+          <div className="flex flex-wrap gap-4 mt-2">
+            <label className="flex items-center cursor-pointer">
               <input 
                 type="radio" 
                 name="tipo_pergunta" 
                 value="Multipla Escolha"
                 checked={tipoPergunta === 'Multipla Escolha'}
                 onChange={() => setTipoPergunta('Multipla Escolha')}
+                className="mr-2"
               />
-              <span className="ml-2">Múltipla Escolha</span>
+              Múltipla Escolha
             </label>
-            <label className="flex items-center">
+            <label className="flex items-center cursor-pointer">
               <input 
                 type="radio" 
                 name="tipo_pergunta" 
                 value="Dissertativa"
                 checked={tipoPergunta === 'Dissertativa'}
                 onChange={() => setTipoPergunta('Dissertativa')}
+                className="mr-2"
               />
-              <span className="ml-2">Dissertativa</span>
+              Dissertativa
             </label>
-            <label className="flex items-center">
+            <label className="flex items-center cursor-pointer">
               <input 
                 type="radio" 
                 name="tipo_pergunta" 
                 value="Verdadeiro/Falso"
                 checked={tipoPergunta === 'Verdadeiro/Falso'}
                 onChange={() => setTipoPergunta('Verdadeiro/Falso')}
+                className="mr-2"
               />
-              <span className="ml-2">Verdadeiro/Falso</span>
+              Verdadeiro/Falso
             </label>
           </div>
         </div>
@@ -154,30 +176,17 @@ export default function NewQuestionPage() {
           {tipoPergunta === 'Multipla Escolha' && <OpcoesMultiplaEscolha />}
           {tipoPergunta === 'Verdadeiro/Falso' && <OpcoesVerdadeiroFalso />}
           {tipoPergunta === 'Dissertativa' && (
-            <p className="text-gray-500 text-sm">
-              Questões dissertativas não exigem opções de resposta.
+            <p className="text-gray-500 text-sm bg-gray-50 p-3 rounded border border-dashed border-gray-300">
+              Questões dissertativas serão corrigidas manualmente e não exigem cadastro de opções.
             </p>
           )}
         </div>
 
-        {/* 5. Configurações de Privacidade */}
-        <div className="border-t pt-4">
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" />
-            <span className="text-sm font-medium text-gray-700">
-              Questão Pública (visível para todos os usuários)
-            </span>
-          </label>
-          <p className="text-xs text-gray-500 mt-1">
-            Se deixado desmarcado, esta questão será privada e visível apenas para você.
-          </p>
-        </div>
-
-        {/* 6. Botão de Salvar */}
-        <div className="text-right">
+        {/* 5. Botão de Salvar (Área de Privacidade removida) */}
+        <div className="border-t pt-6 text-right">
           <button
             type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700"
+            className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors shadow-sm"
           >
             Salvar Questão
           </button>
