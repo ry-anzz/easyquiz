@@ -1,10 +1,10 @@
 'use client'; 
 
 import { useState } from 'react';
-// Ícones ajudam na clareza
-import { Filter, FileText, CheckSquare, Hash } from 'lucide-react'; 
+// Adicionei o ícone 'Users' para representar os professores
+import { Filter, FileText, CheckSquare, Users } from 'lucide-react'; 
 
-// Dados Falsos (Mock Data) para os filtros
+// 1. Dados Falsos (Mock Data)
 const mockDisciplinas = [
   { id: '1', nome: 'Cálculo 1' },
   { id: '2', nome: 'Engenharia de Software' },
@@ -14,16 +14,39 @@ const mockDisciplinas = [
   { id: '6', nome: 'Física 1' },
 ];
 
+// Novo Mock de Professores
+const mockProfessores = [
+  { id: '1', nome: 'Prof. João Silva' },
+  { id: '2', nome: 'Dra. Maria Oliveira' },
+  { id: '3', nome: 'Prof. Carlos Santos' },
+  { id: '4', nome: 'Dr. Ana Souza' },
+  { id: '5', nome: 'Prof. Roberto Lima' },
+];
+
 const mockDificuldades = ['Fácil', 'Médio', 'Difícil'];
 
 export default function TestGeneratorPage() {
   const [tituloProva, setTituloProva] = useState('');
   const [disciplinasSelecionadas, setDisciplinasSelecionadas] = useState<string[]>([]);
+  // 2. Novo Estado para Professores
+  const [professoresSelecionados, setProfessoresSelecionados] = useState<string[]>([]);
   const [quantidadeQuestoes, setQuantidadeQuestoes] = useState(10);
 
   const handleGenerateTest = (e: React.FormEvent) => {
     e.preventDefault(); 
-    alert(`Gerando prova...\n(Simulação de chamada de API)`);
+    // Agora incluímos os professores no log/alerta
+    console.log("Disciplinas:", disciplinasSelecionadas);
+    console.log("Professores:", professoresSelecionados);
+    alert(`Gerando prova com ${professoresSelecionados.length} professores selecionados...`);
+  };
+
+  // Função auxiliar para alternar seleção de professores (mesma lógica das disciplinas)
+  const toggleProfessor = (nome: string) => {
+    if (professoresSelecionados.includes(nome)) {
+      setProfessoresSelecionados(professoresSelecionados.filter((p) => p !== nome));
+    } else {
+      setProfessoresSelecionados([...professoresSelecionados, nome]);
+    }
   };
 
   return (
@@ -34,7 +57,7 @@ export default function TestGeneratorPage() {
         className="bg-white shadow-lg rounded-lg"
         onSubmit={handleGenerateTest}
       >
-        {/* Usamos um "fieldset" para agrupar campos relacionados */}
+        {/* --- Seção de Informações Básicas --- */}
         <fieldset className="p-6 md:p-8 space-y-6">
           <legend className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <FileText className="mr-2 text-blue-600" size={24} />
@@ -60,43 +83,76 @@ export default function TestGeneratorPage() {
           </div>
         </fieldset>
 
-        {/* --- Seção de Filtros --- */}
+        {/* --- Seção de Filtros de Conteúdo (ATUALIZADA) --- */}
         <fieldset className="border-t border-gray-200 p-6 md:p-8 space-y-6">
           <legend className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <Filter className="mr-2 text-blue-600" size={24} />
             Filtros de Conteúdo
           </legend>
 
-          {/* Filtro de Disciplina(s) com Colunas */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Disciplinas (selecione uma ou mais)
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-48 overflow-y-auto border border-gray-300 p-4 rounded-md">
-              {mockDisciplinas.map((disciplina) => (
-                <label key={disciplina.id} className="flex items-center space-x-2 p-1 rounded-md hover:bg-gray-50 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="rounded text-blue-600 focus:ring-blue-500"
-                    value={disciplina.nome}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setDisciplinasSelecionadas([...disciplinasSelecionadas, disciplina.nome]);
-                      } else {
-                        setDisciplinasSelecionadas(
-                          disciplinasSelecionadas.filter((d) => d !== disciplina.nome)
-                        );
-                      }
-                    }}
-                  />
-                  <span className="text-sm text-gray-700">{disciplina.nome}</span>
-                </label>
-              ))}
+          {/* Grid para dividir Disciplinas e Professores lado a lado em telas grandes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {/* Coluna 1: Filtro de Disciplinas */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Disciplinas
+              </label>
+              <div className="max-h-48 overflow-y-auto border border-gray-300 p-4 rounded-md bg-gray-50/50">
+                <div className="space-y-2">
+                    {mockDisciplinas.map((disciplina) => (
+                    <label key={disciplina.id} className="flex items-center space-x-2 cursor-pointer hover:opacity-80">
+                        <input
+                        type="checkbox"
+                        className="rounded text-blue-600 focus:ring-blue-500"
+                        value={disciplina.nome}
+                        onChange={(e) => {
+                            if (e.target.checked) {
+                            setDisciplinasSelecionadas([...disciplinasSelecionadas, disciplina.nome]);
+                            } else {
+                            setDisciplinasSelecionadas(
+                                disciplinasSelecionadas.filter((d) => d !== disciplina.nome)
+                            );
+                            }
+                        }}
+                        />
+                        <span className="text-sm text-gray-700">{disciplina.nome}</span>
+                    </label>
+                    ))}
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Selecione as matérias da prova.</p>
             </div>
+
+            {/* Coluna 2: NOVO Filtro de Professores */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                <Users className="w-4 h-4 text-gray-500" /> {/* Ícone opcional */}
+                Professores (Autores)
+              </label>
+              <div className="max-h-48 overflow-y-auto border border-gray-300 p-4 rounded-md bg-gray-50/50">
+                <div className="space-y-2">
+                    {mockProfessores.map((professor) => (
+                    <label key={professor.id} className="flex items-center space-x-2 cursor-pointer hover:opacity-80">
+                        <input
+                        type="checkbox"
+                        className="rounded text-blue-600 focus:ring-blue-500"
+                        value={professor.nome}
+                        checked={professoresSelecionados.includes(professor.nome)}
+                        onChange={() => toggleProfessor(professor.nome)}
+                        />
+                        <span className="text-sm text-gray-700">{professor.nome}</span>
+                    </label>
+                    ))}
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Selecione os autores das questões.</p>
+            </div>
+
           </div>
         </fieldset>
 
-        {/* --- Seção de Configuração --- */}
+        {/* --- Seção de Configuração da Prova --- */}
         <fieldset className="border-t border-gray-200 p-6 md:p-8 space-y-6">
           <legend className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
             <CheckSquare className="mr-2 text-blue-600" size={24} />
@@ -109,7 +165,7 @@ export default function TestGeneratorPage() {
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Nível de Dificuldade
               </label>
-              <div className="space-y-2">
+              <div className="space-y-2 p-2">
                 {mockDificuldades.map((nivel) => (
                   <label key={nivel} className="flex items-center space-x-2 p-1 cursor-pointer">
                     <input 
